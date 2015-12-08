@@ -19,19 +19,12 @@ public class click : MonoBehaviour {
     void OnMouseDown()
     {
 
-        //Vector3 mousePosition = Input.mousePosition;
-        //Debug.Log(mousePosition);
-        //mousePosition.z += 10;
-        //point = Camera.main.ScreenToWorldPoint(mousePosition);
-        //Debug.Log(point);
-
 
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hit, 100.0f)) {
             point = hit.point;
-            point.z -= 2;
         }
 
 

@@ -33,7 +33,11 @@ public class click : MonoBehaviour {
     }
 
 
-    void OnMouseDrag()
+    public void ClearDreidels()
     {
+        var dreidels = FindObjectsOfType<Spin>();
+        foreach (var item in dreidels) {
+            Destroy(item.gameObject);
+        }
     }
 }

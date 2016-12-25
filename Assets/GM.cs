@@ -10,12 +10,10 @@ public class GM : MonoBehaviour
     public int pot = 3;
     public bool isPlaying = false;
 
-    public Text txtPlayer1Name;
-    public Text txtPlayer1Coins;
-    public Text txtPlayer2Name;
-    public Text txtPlayer2Coins;
     public Text txtPotCoins;
-
+    public Text txtLastPlayer;
+    public Text txtLastSpin;
+    public Text txtCurPlayer;
 
     public static GM Current;
 
@@ -24,22 +22,28 @@ public class GM : MonoBehaviour
     {
         Current = this;
 
-        txtPlayer1Name = GameObject.Find("txtPlayer1Name").GetComponent<Text>();
-        txtPlayer1Coins = GameObject.Find("txtPlayer1Coins").GetComponent<Text>();
-        txtPlayer2Name = GameObject.Find("txtPlayer2Name").GetComponent<Text>();
-        txtPlayer2Coins = GameObject.Find("txtPlayer2Coins").GetComponent<Text>();
         txtPotCoins = GameObject.Find("txtPotCoins").GetComponent<Text>();
+        txtLastPlayer = GameObject.Find("txtLastPlayer").GetComponent<Text>();
+        txtLastSpin = GameObject.Find("txtLastSpin").GetComponent<Text>();
+        txtCurPlayer = GameObject.Find("txtCurPlayer").GetComponent<Text>();
 
-        players.Add( new Player { name = "Moshe", points = 100 } );
-        players.Add( new Player { name = "Raphi", points = 100 } );
+        players.Add(new Player { name = "Moshe", coins = 100, txtName = GameObject.Find("txtPlayer1Name").GetComponent<Text>(), txtCoins = GameObject.Find("txtPlayer1Coins").GetComponent<Text>() });
+        players.Add(new Player { name = "Raphi", coins = 100, txtName = GameObject.Find("txtPlayer2Name").GetComponent<Text>(), txtCoins = GameObject.Find("txtPlayer2Coins").GetComponent<Text>() });
     }
     public void StartGame()
     {
         GM.Current.isPlaying = true;
+
+        players[0].name = GameObject.Find("Player1Name").GetComponent<InputField>().text;
+        players[1].name = GameObject.Find("Player2Name").GetComponent<InputField>().text;
+
         GameObject.Find("StartPanel").SetActive(false);
-        txtPlayer1Name.text = players[0].name;
-        txtPlayer2Name.text = players[1].name;
-        txtPotCoins.text = pot.ToString();
+
+
+        players[0].txtName.text = players[0].name + ":";
+        players[1].txtName.text = players[1].name + ":";
+
+        EndOfTurn(DriedelSides.Up);
 
     }
 
@@ -50,9 +54,54 @@ public class GM : MonoBehaviour
 
     }
 
-    public void EndOfTurn()
+    public void EndOfTurn(DriedelSides letter)
     {
-        iCurrentPlayer = iCurrentPlayer++ % players.Count;
+        switch (letter)
+        {
+            case DriedelSides.Up:
+                break;
+            case DriedelSides.Nun:
+                break;
+            case DriedelSides.Gimel:
+                players[iCurrentPlayer].coins += pot;
+                pot = 0;
+                break;
+            case DriedelSides.Hey:
+                var half = pot / 2;
+                players[iCurrentPlayer].coins += half;
+                pot -= half;
+                break;
+            case DriedelSides.Shin:
+                players[iCurrentPlayer].coins--;
+                pot++;
+                break;
+            case DriedelSides.UpsideDown:
+                break;
+            case DriedelSides.Error:
+                break;
+            default:
+                break;
+        }
+        if(pot <= 0)
+        {
+            foreach(var p in players)
+            {
+                p.coins--;
+                pot++;
+            }
+        }
 
+        txtLastSpin.text = letter.ToString();
+        txtPotCoins.text = pot.ToString();
+        players[0].txtCoins.text = players[0].coins.ToString();
+        players[1].txtCoins.text = players[1].coins.ToString();
+
+        players[iCurrentPlayer].txtName.color = Color.black;
+        txtLastPlayer.text = players[iCurrentPlayer].name;
+
+        iCurrentPlayer = (iCurrentPlayer + 1) % players.Count;
+
+        players[iCurrentPlayer].txtName.color = Color.red;
+        txtCurPlayer.text = players[iCurrentPlayer].name;
     }
 }

@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
 
-    public int points = 0;
+    public int coins = 0;
     public string name = "";
+    public Text txtName;
+    public Text txtCoins;
+
     // Use this for initialization
     void Start()
     {

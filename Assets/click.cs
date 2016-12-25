@@ -18,7 +18,10 @@ public class click : MonoBehaviour {
     public Vector3 point;
     void OnMouseDown()
     {
-
+        if (!GM.Current.isPlaying)
+        {
+            return;
+        }
 
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

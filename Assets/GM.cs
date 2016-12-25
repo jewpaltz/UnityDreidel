@@ -15,6 +15,8 @@ public class GM : MonoBehaviour
     public Text txtLastSpin;
     public Text txtCurPlayer;
 
+    public GameObject StartPanel;
+
     public static GM Current;
 
     // Use this for initialization
@@ -27,17 +29,21 @@ public class GM : MonoBehaviour
         txtLastSpin = GameObject.Find("txtLastSpin").GetComponent<Text>();
         txtCurPlayer = GameObject.Find("txtCurPlayer").GetComponent<Text>();
 
-        players.Add(new Player { name = "Moshe", coins = 100, txtName = GameObject.Find("txtPlayer1Name").GetComponent<Text>(), txtCoins = GameObject.Find("txtPlayer1Coins").GetComponent<Text>() });
-        players.Add(new Player { name = "Raphi", coins = 100, txtName = GameObject.Find("txtPlayer2Name").GetComponent<Text>(), txtCoins = GameObject.Find("txtPlayer2Coins").GetComponent<Text>() });
+        StartPanel = GameObject.Find("StartPanel");
+
+        players.Add(new Player { txtName = GameObject.Find("txtPlayer1Name").GetComponent<Text>(), txtCoins = GameObject.Find("txtPlayer1Coins").GetComponent<Text>() });
+        players.Add(new Player { txtName = GameObject.Find("txtPlayer2Name").GetComponent<Text>(), txtCoins = GameObject.Find("txtPlayer2Coins").GetComponent<Text>() });
     }
     public void StartGame()
     {
         GM.Current.isPlaying = true;
 
         players[0].name = GameObject.Find("Player1Name").GetComponent<InputField>().text;
+        players[0].coins = 10;
         players[1].name = GameObject.Find("Player2Name").GetComponent<InputField>().text;
+        players[1].coins = 10;
 
-        GameObject.Find("StartPanel").SetActive(false);
+        StartPanel.SetActive(false);
 
 
         players[0].txtName.text = players[0].name + ":";
@@ -103,5 +109,19 @@ public class GM : MonoBehaviour
 
         players[iCurrentPlayer].txtName.color = Color.red;
         txtCurPlayer.text = players[iCurrentPlayer].name;
+    }
+    public void ClearDreidels()
+    {
+        var dreidels = FindObjectsOfType<Spin>();
+        foreach (var item in dreidels)
+        {
+            Destroy(item.gameObject);
+        }
+    }
+    public void ShowStartScreen()
+    {
+        isPlaying = false;
+        StartPanel.SetActive(true);
+        ClearDreidels();
     }
 }

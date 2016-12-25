@@ -34,13 +34,4 @@ public class click : MonoBehaviour {
         Instantiate(DriedelPrefab, point, Quaternion.Euler(270,0,0));
 
     }
-
-
-    public void ClearDreidels()
-    {
-        var dreidels = FindObjectsOfType<Spin>();
-        foreach (var item in dreidels) {
-            Destroy(item.gameObject);
-        }
-    }
 }
